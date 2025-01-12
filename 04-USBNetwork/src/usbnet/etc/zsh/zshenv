@@ -1,0 +1,82 @@
+##
+#
+#	NiLuJe's .zshenv - eInk edition
+#
+#	kate: syntax Zsh
+#
+#	$Id: zshenv 18640 2021-07-05 16:27:37Z NiLuJe $
+#
+##
+
+# Kindle or Kobo?
+local eink_userstore
+if [[ -e "/proc/usid" ]] ; then
+	eink_userstore="/mnt/us"
+
+	# Non en-US locales go wonky w/ zsh-syntax-highlighting (Invalid collation character)...
+	export LANG="en_US.utf8"
+	export LC_ALL="en_US.utf8"
+else
+	eink_userstore="/mnt/onboard/.niluje"
+
+	# HOME defaults to / on Kobo, and the rootfs happens to be RW...
+	# Point it to /tmp instead (as it's a tiny tmpfs) to avoid FUBAR'ing the rootfs...
+	export HOME="/tmp/root"
+	[[ ! -d "${HOME}" ]] && mkdir -p "${HOME}"
+	cd "${HOME}"
+
+	# Make sure our custom busybox will get picked up above Kobo's...
+	export PATH="/usr/local/niluje/usbnet/sbin:/usr/local/niluje/usbnet/usr/sbin:/usr/local/niluje/usbnet/bin:/usr/local/niluje/usbnet/usr/bin:${PATH}"
+
+	# If you've bothered to fix locales, use a sane one
+	# c.f., http://trac.ak-team.com/trac/browser/niluje/Configs/trunk/Kindle/Misc/kobo-fix-locales.sh
+	if [[ -f /usr/lib/locale/locale-archive ]] ; then
+		export LANG="en_US.UTF-8"
+		export LC_ALL="en_US.UTF-8"
+	fi
+
+	# Make sure we've got a sane PRODUCT & PLATFORM
+	if [[ -z "${PLATFORM}" ]] ; then
+		# NOTE: If busybox is built *without* CONFIG_EXTRA_COMPAT (which is highly likely,
+		#       and is indeed the case for both Kobo & us),
+		#       grep doesn't support the -z flag, but it also uses xmalloc_fgetline instead of bb_getline...
+		#       This happens to break on NULs and strip trailing LNs, which works out just fine for this,
+		#       allowing us a nifty one-liner by abusing both this grep quirk and shell word splitting :).
+		# NOTE: Also, this behaves because nothing in there is liable to require quoting.
+		#       If it did, see https://unix.stackexchange.com/a/125146 for some hardier alternatives...
+		#       (I like the read -r -d '' + printf %q approach, but it's not portable. OK in ZSH, not BB :/).
+		#       See also https://stackoverflow.com/q/45712415
+		export $(grep -s -E -e '^(PRODUCT|PLATFORM)=' "/proc/$(pidof -s udevd)/environ")
+	fi
+
+	# Use PRODUCT instead of the useless empty hostname (or just plain kobo on newer FW versions)
+	export HOST="${PRODUCT}"
+fi
+
+# Make sure we don't store anything in HOME, because it's either broken or a tmpfs...
+export ZDOTDIR="${eink_userstore}/usbnet/etc/zsh"
+
+# Make OpenSSL use our own up-to-date cert bundle
+export SSL_CERT_FILE="${eink_userstore}/usbnet/lib/ca-bundle.crt"
+
+# Tell SQLite where to store its history file, because it doesn't honor HOME if it succeeds in looking up the home directory from the passwd file...
+export SQLITE_HISTORY="${eink_userstore}/usbnet/etc/.sqlite_history"
+
+# Figure out where to poke for the battery capacity...
+local my_batt
+# This goes: Rex KT3 Zelda Wario Yoshi Luigi Kobo KoboMk8 Legacy
+for my_batt in /sys/class/power_supply/bd71827_bat/capacity /sys/class/power_supply/bd7181x_bat/capacity /sys/class/power_supply/max77796-battery/capacity /sys/devices/system/wario_battery/wario_battery0/battery_capacity /sys/devices/system/yoshi_battery/yoshi_battery0/battery_capacity /sys/devices/system/luigi_battery/luigi_battery0/battery_capacity /sys/class/power_supply/mc13892_bat/capacity /sys/class/power_supply/battery/capacity /usr/bin/gasgauge-info ; do
+	if [[ -f "${my_batt}" ]] ; then
+		# Handle gasgauge-info for legacy Kindles...
+		if [[ -x "${my_batt}" ]] ; then
+			export BATTERY_INFO_BIN="${my_batt}"
+			break
+		else
+			export SYSFS_BATTERY_CAPA_PATH="${my_batt}"
+			break
+		fi
+	fi
+done
+
+# We don't care about ash's prompt
+unset PS1
