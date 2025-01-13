@@ -79,4 +79,8 @@ The PNG needs to be 760 x 1026 8 bit colour (greyscale) depth
 
 ### Tools to create the image
 
-TBC
+It looks like the excellent [Pillow](https://pillow.readthedocs.io/en/stable/) library does everything I need it to do.
+
+python/test.py has a thing in it.
+
+All I need to sort out now is where to get the data from and how to organise it on the screen.
