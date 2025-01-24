@@ -3,6 +3,7 @@ services:
   kindle_display:
     container_name: kindle_display
     build:
+      # context: /usr/local/scripts/kindleDisplay
       context: .
       dockerfile: Dockerfile
     image: result/latest

@@ -54,7 +54,6 @@ def get_data():
     img_io.seek(0)
 
     return send_file(img_io, mimetype="image/png")
-    return f"{ha_data}"
 
 
 # Function to find the dictionary with the specified entity_id
@@ -73,19 +72,28 @@ def entity_display(data, entity_id):
     return f"{entity['state']}{entity['attributes']['unit_of_measurement']}"
 
 
-def solar_text(x, y, ha_data, entity_id, suffix, draw):
+def solar_text(x, y, ha_data, entities, suffix, draw):
     cur_y = y
-    for each_entity in entity_id:
+    if len(entities) == 2:
+        for each_entity in entities:
+            draw.text(
+                (x, cur_y),
+                entity_display(ha_data, each_entity),
+                font=value_font,
+                fill=(0),
+            )
+            cur_y += 40
+    else:
         draw.text(
             (x, cur_y),
-            entity_display(ha_data, each_entity),
+            entity_display(ha_data, entities),
             font=value_font,
             fill=(0),
         )
         cur_y += 40
     draw.text(
-        (x, cur_y + 35),
-        entity_display(suffix, each_entity),
+        (x, cur_y - 5),
+        suffix,
         font=suffix_font,
         fill=(0),
     )
@@ -152,7 +160,7 @@ def render_picture(ha_data, kindle_battery):
     image.paste(mainsplug_icon, (5, 260))
 
     solar_text(165, 260, ha_data, "sensor.solis_total_consumption_power", "now", draw)
-    solar_text(165, 260, ha_data, "sensor.solis_daily_grid_energy_used", "now", draw)
+    solar_text(165, 330, ha_data, "sensor.solis_daily_grid_energy_used", "now", draw)
 
     # Grid power
     image.paste(pylon_icon, (5, 455))
@@ -203,12 +211,12 @@ def render_picture(ha_data, kindle_battery):
 
     image.paste(battery_direction_icon, (140, 652))
 
-    solar_text(
-        165,
-        640,
-        f"{entity_display(ha_data, 'sensor.solis_remaining_battery_capacity').split('.')[0]}%",
-        "battery",
-        draw,
+    # Battery as it is - to cut off trailing decimal
+    draw.text(
+        (165, 640),
+        f"{entity_data(ha_data, 'sensor.solis_remaining_battery_capacity')[0].split('.')[0]}%",
+        font=value_font,
+        fill=(0),
     )
 
     # Kindle battery
