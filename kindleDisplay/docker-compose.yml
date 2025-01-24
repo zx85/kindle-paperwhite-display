@@ -3,7 +3,6 @@ services:
   kindle_display:
     container_name: kindle_display
     build:
-      # context: /usr/local/scripts/kindleDisplay
       context: .
       dockerfile: Dockerfile
     image: result/latest
@@ -12,3 +11,8 @@ services:
       - .env
     ports:
       - "5050:5050"
+    environment:
+      - FLASK_APP=kindleDisplay
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+

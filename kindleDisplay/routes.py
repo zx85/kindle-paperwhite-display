@@ -9,27 +9,27 @@ import sys
 
 # use a truetype font
 heading_font = ImageFont.truetype(
-    "kindleDisplay/fonts/encode-sans/EncodeSansCompressed-700-Bold.ttf", 64
+    "fonts/encode-sans/EncodeSansCompressed-700-Bold.ttf", 64
 )
 value_font = ImageFont.truetype(
-    "kindleDisplay/fonts/encode-sans/EncodeSansCompressed-500-Medium.ttf", 36
+    "fonts/encode-sans/EncodeSansCompressed-500-Medium.ttf", 48
 )
 suffix_font = ImageFont.truetype(
-    "kindleDisplay/fonts/encode-sans/EncodeSansCondensed-300-Light.ttf", 24
+    "fonts/encode-sans/EncodeSansCondensed-300-Light.ttf", 32
 )
 
 weather_icons = [
-    Image.open("kindleDisplay/images/weather-sunshine.png"),
-    Image.open("kindleDisplay/images/weather-suncloud.png"),
-    Image.open("kindleDisplay/images/weather-cloudsun.png"),
-    Image.open("kindleDisplay/images/weather-cloud.png"),
-    Image.open("kindleDisplay/images/weather-night.png"),
+    Image.open("images/weather-sunshine.png"),
+    Image.open("images/weather-suncloud.png"),
+    Image.open("images/weather-cloudsun.png"),
+    Image.open("images/weather-cloud.png"),
+    Image.open("images/weather-night.png"),
 ]
-mainsplug_icon = Image.open("kindleDisplay/images/mains-plug.png")
-pylon_icon = Image.open("kindleDisplay/images/pylon.png")
-uparrow_icon = Image.open("kindleDisplay/images/up-arrow.png")
-downarrow_icon = Image.open("kindleDisplay/images/down-arrow.png")
-noarrow_icon = Image.open("kindleDisplay/images/no-arrow.png")
+mainsplug_icon = Image.open("images/mains-plug.png")
+pylon_icon = Image.open("images/pylon.png")
+uparrow_icon = Image.open("images/up-arrow.png")
+downarrow_icon = Image.open("images/down-arrow.png")
+noarrow_icon = Image.open("images/no-arrow.png")
 previous_timestamp = ""
 previous_battery = 50.0
 battery_direction_icon = noarrow_icon
@@ -69,7 +69,15 @@ def entity_data(data, entity_id):
 # Function to find the dictionary with the specified entity_id
 def entity_display(data, entity_id):
     entity = next((item for item in data if item["entity_id"] == entity_id), None)
-    return f"{entity['state']}{entity['attributes']['unit_of_measurement']}"
+    value=entity['state'].replace('-','')
+    uom=entity['attributes']['unit_of_measurement']
+    if uom == 'W' or uom == '%':
+        display_value=f"{int(float(value))}"
+    elif uom == 'kW' or uom == 'kWh':
+        display_value=f"{float(value):.1f}"
+    else:
+        display_value=value
+    return f"{display_value}{uom}"
 
 
 def solar_text(x, y, ha_data, entities, suffix, draw):
@@ -82,7 +90,7 @@ def solar_text(x, y, ha_data, entities, suffix, draw):
                 font=value_font,
                 fill=(0),
             )
-            cur_y += 40
+            cur_y += 55
     else:
         draw.text(
             (x, cur_y),
@@ -90,9 +98,9 @@ def solar_text(x, y, ha_data, entities, suffix, draw):
             font=value_font,
             fill=(0),
         )
-        cur_y += 40
+        cur_y += 55
     draw.text(
-        (x, cur_y - 5),
+        (x, cur_y-10),
         suffix,
         font=suffix_font,
         fill=(0),
@@ -121,65 +129,56 @@ def render_picture(ha_data, kindle_battery):
     # "grid_in_today":"sensor.solis_daily_grid_energy_purchased"}
     # "battery_per": "sensor.solis_remaining_battery_capacity",  # % battery remaining
 
-    # Heading
-    draw.text(
-        (80, 10),
-        "Solar data",
-        font=heading_font,
-        fill=(0),
-    )
-    draw.line((0, 90, 380, 90), fill=128)
+    # Solar power
+    #######################################
 
-    # Time
-    draw.text(
-        (320, 92),
-        f"@{entity_data(ha_data, 'sensor.solis_total_consumption_power')[2][11:16]}",
-        font=suffix_font,
-        fill=(0),
-    )
     # Solar icon
     solar_value = float(entity_data(ha_data, "sensor.solis_ac_output_total_power")[0])
     if solar_value < 100:
-        image.paste(weather_icons[4], (5, 110))
+        image.paste(weather_icons[4], (5, 10))
     elif solar_value < 500:
-        image.paste(weather_icons[3], (5, 110))
+        image.paste(weather_icons[3], (5, 10))
     elif solar_value < 1000:
-        image.paste(weather_icons[2], (5, 110))
+        image.paste(weather_icons[2], (5, 10))
     elif solar_value < 1800:
-        image.paste(weather_icons[1], (5, 110))
+        image.paste(weather_icons[1], (5, 10))
     else:
-        image.paste(weather_icons[0], (5, 110))
+        image.paste(weather_icons[0], (5, 10))
 
     # Solar now
-    solar_text(165, 100, ha_data, "sensor.solis_ac_output_total_power", "now", draw)
+    solar_text(15, 130, ha_data, "sensor.solis_ac_output_total_power", "now", draw)
 
     # Solar today
-    solar_text(165, 170, ha_data, "sensor.solis_energy_today", "today", draw)
+    solar_text(15, 220, ha_data, "sensor.solis_energy_today", "today", draw)
+
+    # Consumed power
+    ########################################
 
     # Power used
-    image.paste(mainsplug_icon, (5, 260))
+    image.paste(mainsplug_icon, (205, 10))
 
-    solar_text(165, 260, ha_data, "sensor.solis_total_consumption_power", "now", draw)
-    solar_text(165, 330, ha_data, "sensor.solis_daily_grid_energy_used", "now", draw)
+    solar_text(200, 130, ha_data, "sensor.solis_total_consumption_power", "now", draw)
+    solar_text(200, 220, ha_data, "sensor.solis_daily_grid_energy_used", "today", draw)
 
     # Grid power
-    image.paste(pylon_icon, (5, 455))
+    ########################################
+    image.paste(pylon_icon, (405, 10))
 
     cur_power = float(entity_data(ha_data, "sensor.solis_power_grid_total_power")[0])
     if cur_power > 0:
-        image.paste(uparrow_icon, (140, 440))
+        image.paste(uparrow_icon, (408, 150))
     elif cur_power < 0:
-        image.paste(downarrow_icon, (140, 440))
+        image.paste(downarrow_icon, (408, 150))
 
-    solar_text(165, 430, ha_data, "sensor.solis_power_grid_total_power", "now", draw)
+    solar_text(430, 130, ha_data, "sensor.solis_power_grid_total_power", "now", draw)
 
     # Arrows
-    image.paste(uparrow_icon, (140, 510))
-    image.paste(downarrow_icon, (140, 552))
+    image.paste(uparrow_icon, (408, 240))
+    image.paste(downarrow_icon, (408, 295))
 
     solar_text(
-        165,
-        500,
+        430,
+        220,
         ha_data,
         (
             "sensor.solis_daily_on_grid_energy",
@@ -194,9 +193,9 @@ def render_picture(ha_data, kindle_battery):
         entity_data(ha_data, "sensor.solis_remaining_battery_capacity")[0]
     )
 
-    draw.rectangle([60, 624, 70, 630], fill=64)  # top
-    draw.rectangle([50, 630, 80, 700], fill=64)  # background
-    draw.rectangle([55, 640, 75, int(640 + (100 - battery_value) / 2)], fill=240)
+    draw.rectangle([675, 10, 695, 122], fill=64)  # top
+    draw.rectangle([655, 22, 715, 138], fill=64)  # background
+    draw.rectangle([665, 30, 705, int(130  - battery_value)], fill=240)
 
     if previous_timestamp != current_timestamp:
         previous_battery = battery_value
@@ -209,15 +208,10 @@ def render_picture(ha_data, kindle_battery):
         else:
             battery_direction_icon = noarrow_icon
 
-    image.paste(battery_direction_icon, (140, 652))
+    image.paste(battery_direction_icon, (620, 70))
 
-    # Battery as it is - to cut off trailing decimal
-    draw.text(
-        (165, 640),
-        f"{entity_data(ha_data, 'sensor.solis_remaining_battery_capacity')[0].split('.')[0]}%",
-        font=value_font,
-        fill=(0),
-    )
+    # Battery
+    solar_text(630, 150, ha_data, "sensor.solis_remaining_battery_capacity", f"@{entity_data(ha_data, 'sensor.solis_total_consumption_power')[2][11:16]}", draw)
 
     # Kindle battery
     draw.text(
