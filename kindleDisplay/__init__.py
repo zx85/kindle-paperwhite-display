@@ -11,4 +11,4 @@ app = Flask(__name__)
 # Database credentials for the conkers
 ha_info = {"url": os.environ.get("URL"), "key": os.environ.get("KEY")}
 
-from kindleDisplay import routes
+from kindleDisplay.kindleDisplay import routes
