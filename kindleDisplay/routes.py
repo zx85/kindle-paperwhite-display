@@ -69,14 +69,14 @@ def entity_data(data, entity_id):
 # Function to find the dictionary with the specified entity_id
 def entity_display(data, entity_id):
     entity = next((item for item in data if item["entity_id"] == entity_id), None)
-    value=entity['state'].replace('-','')
-    uom=entity['attributes']['unit_of_measurement']
-    if uom == 'W' or uom == '%':
-        display_value=f"{int(float(value))}"
-    elif uom == 'kW' or uom == 'kWh':
-        display_value=f"{float(value):.1f}"
+    value = entity["state"].replace("-", "")
+    uom = entity["attributes"]["unit_of_measurement"]
+    if uom == "W" or uom == "%":
+        display_value = f"{int(float(value))}"
+    elif uom == "kW" or uom == "kWh":
+        display_value = f"{float(value):.1f}"
     else:
-        display_value=value
+        display_value = value
     return f"{display_value}{uom}"
 
 
@@ -100,7 +100,7 @@ def solar_text(x, y, ha_data, entities, suffix, draw):
         )
         cur_y += 55
     draw.text(
-        (x, cur_y-10),
+        (x, cur_y - 10),
         suffix,
         font=suffix_font,
         fill=(0),
@@ -134,7 +134,7 @@ def render_picture(ha_data, kindle_battery):
 
     # Solar icon
     solar_value = float(entity_data(ha_data, "sensor.solis_ac_output_total_power")[0])
-    if solar_value < 100:
+    if solar_value < 40:
         image.paste(weather_icons[4], (5, 10))
     elif solar_value < 500:
         image.paste(weather_icons[3], (5, 10))
@@ -195,11 +195,9 @@ def render_picture(ha_data, kindle_battery):
 
     draw.rectangle([675, 10, 695, 122], fill=64)  # top
     draw.rectangle([655, 22, 715, 138], fill=64)  # background
-    draw.rectangle([665, 30, 705, int(130  - battery_value)], fill=240)
+    draw.rectangle([665, 30, 705, int(130 - battery_value)], fill=240)
 
     if previous_timestamp != current_timestamp:
-        previous_battery = battery_value
-
         # Arrows if the time has changed
         if battery_value > previous_battery:
             battery_direction_icon = uparrow_icon
@@ -207,11 +205,19 @@ def render_picture(ha_data, kindle_battery):
             battery_direction_icon = downarrow_icon
         else:
             battery_direction_icon = noarrow_icon
+        previous_battery = battery_value
 
     image.paste(battery_direction_icon, (620, 70))
 
     # Battery
-    solar_text(630, 150, ha_data, "sensor.solis_remaining_battery_capacity", f"@{entity_data(ha_data, 'sensor.solis_total_consumption_power')[2][11:16]}", draw)
+    solar_text(
+        630,
+        150,
+        ha_data,
+        "sensor.solis_remaining_battery_capacity",
+        f"@{entity_data(ha_data, 'sensor.solis_total_consumption_power')[2][11:16]}",
+        draw,
+    )
 
     # Kindle battery
     draw.text(
