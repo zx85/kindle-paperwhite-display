@@ -1,4 +1,3 @@
-version: '3'
 services:
   kindle_display:
     container_name: kindle_display
