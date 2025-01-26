@@ -5,20 +5,26 @@ from io import BytesIO
 from kindleDisplay.includes.solar import display_solar
 from kindleDisplay.includes.kindle_battery import display_kindle_battery
 from kindleDisplay.includes.presence import display_presence
+from kindleDisplay.includes.weather import display_weather
+from kindleDisplay.includes.tasks import display_tasks
 
 import json
 import requests
 import datetime
 import sys
 
-display = kindleDisplay()
+display = kindleDisplay(ha_info)
 
 
 def render_picture(ha_data, kindle_battery, display):
     display.clear_image()
     display_solar(ha_data, display)
-    display_kindle_battery(kindle_battery, display)
+    display.draw.line((40, 380, 840, 380), fill=64, width=1)
+    display_weather(ha_data, display)
+    display.draw.line((40, 500, 840, 500), fill=64, width=1)
+    display_tasks(display)
     display_presence(ha_data, display)
+    display_kindle_battery(kindle_battery, display)
 
     out = display.image.rotate(270, expand=True)  # degrees counter-clockwise
     return out
@@ -31,7 +37,7 @@ def get_data():
     kindle_battery = request.args.get("battery")
     # Get the data from Home Assistant
     ha_data = requests.get(
-        "https://ha.mus-ic.co.uk/api/states",
+        f"{ha_info['url']}/states",
         headers={"Authorization": f"Bearer {ha_info['key']}"},
     ).json()
     # time to create a picture

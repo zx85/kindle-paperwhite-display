@@ -23,11 +23,14 @@ def display_presence_text(entity, presence, display):
 
 
 def display_presence(ha_data, display):
+    # position of things
+    presence_left = 940
+
     for each_entity in [
-        ("device_tracker.james_phone", " j", 800, 110),
-        ("device_tracker.beth_phone", "B", 940, 110),
-        ("device_tracker.chris_phone", "C", 800, 250),
-        ("device_tracker.lenni_phone", "L", 940, 250),
+        ("device_tracker.james_phone", " j", presence_left, 110),
+        ("device_tracker.beth_phone", "B", presence_left, 250),
+        ("device_tracker.chris_phone", "C", presence_left, 390),
+        ("device_tracker.lenni_phone", "L", presence_left, 530),
     ]:
         ha_presence = entity_data(ha_data, each_entity[0])[0]
         if ha_presence == "home":

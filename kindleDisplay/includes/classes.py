@@ -2,8 +2,9 @@ from PIL import Image, ImageFont, ImageDraw
 
 
 class kindleDisplay:
-    def __init__(self):
+    def __init__(self, ha_info):
         # pip install Pillow -  https://pillow.readthedocs.io/en/stable/
+        self.ha_info = ha_info
         self.image = Image.new("L", (1026, 760), (255))
         self.draw = ImageDraw.Draw(self.image)
         # use a truetype font
