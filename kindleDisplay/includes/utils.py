@@ -1,11 +1,17 @@
 # Function to find the dictionary with the specified entity_id
 def entity_data(data, entity_id):
     entity = next((item for item in data if item["entity_id"] == entity_id), None)
-    return (
-        entity["state"],
-        entity["attributes"]["unit_of_measurement"],
-        entity["last_updated"],
-    )
+    if uom := entity["attributes"].get("unit_of_measurement"):
+        return (
+            entity["state"],
+            uom,
+            entity["last_updated"],
+        )
+    else:
+        return (
+            entity["state"],
+            entity["last_updated"],
+        )
 
 
 # Function to find the dictionary with the specified entity_id

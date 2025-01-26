@@ -29,7 +29,7 @@ def solar_text(x, y, ha_data, entities, suffix, display):
     )
 
 
-def display_solar(display, ha_data):
+def display_solar(ha_data, display):
     current_timestamp = entity_data(ha_data, "sensor.solis_total_consumption_power")[2]
 
     """

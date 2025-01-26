@@ -4,6 +4,7 @@ from kindleDisplay.includes.classes import kindleDisplay
 from io import BytesIO
 from kindleDisplay.includes.solar import display_solar
 from kindleDisplay.includes.kindle_battery import display_kindle_battery
+from kindleDisplay.includes.presence import display_presence
 
 import json
 import requests
@@ -15,8 +16,9 @@ display = kindleDisplay()
 
 def render_picture(ha_data, kindle_battery, display):
 
-    display_solar(display, ha_data)
+    display_solar(ha_data, display)
     display_kindle_battery(kindle_battery, display)
+    display_presence(ha_data, display)
 
     out = display.image.rotate(270, expand=True)  # degrees counter-clockwise
     return out
