@@ -9,7 +9,7 @@ def display_presence_text(entity, presence, display):
 
     radius = 60
     if presence:
-        colour = 128
+        colour = 64
     else:
         colour = 224
     twoPointList = [(x - radius, y - radius), (x + radius, y + radius)]

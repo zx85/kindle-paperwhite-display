@@ -15,7 +15,7 @@ display = kindleDisplay()
 
 
 def render_picture(ha_data, kindle_battery, display):
-
+    display.clear_image()
     display_solar(ha_data, display)
     display_kindle_battery(kindle_battery, display)
     display_presence(ha_data, display)

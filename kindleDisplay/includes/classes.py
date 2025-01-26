@@ -32,3 +32,7 @@ class kindleDisplay:
         self.previous_timestamp = ""
         self.previous_battery = 50.0
         self.battery_direction_icon = self.noarrow_icon
+
+    def clear_image(self):
+        # Fill the image with white color for RGB images
+        self.draw.rectangle([(0, 0), self.image.size], fill=(255, 255, 255))
