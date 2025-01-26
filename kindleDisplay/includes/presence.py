@@ -24,7 +24,7 @@ def display_presence_text(entity, presence, display):
 
 def display_presence(ha_data, display):
     for each_entity in [
-        ("device_tracker.james_phone", "j", 800, 110),
+        ("device_tracker.james_phone", " j", 800, 110),
         ("device_tracker.beth_phone", "B", 940, 110),
         ("device_tracker.chris_phone", "C", 800, 250),
         ("device_tracker.lenni_phone", "L", 940, 250),

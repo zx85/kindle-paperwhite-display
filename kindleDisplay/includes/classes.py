@@ -35,4 +35,4 @@ class kindleDisplay:
 
     def clear_image(self):
         # Fill the image with white color for RGB images
-        self.draw.rectangle([(0, 0), self.image.size], fill=(255, 255, 255))
+        self.draw.rectangle([(0, 0), self.image.size], fill=(255))
