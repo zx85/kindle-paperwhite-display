@@ -13,13 +13,13 @@ def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
         fill=(64),
     )
     display.draw.text(
-        (print_left + 130, print_top),
+        (print_left + 160, print_top),
         est_finish_hhmm,
         font=display.value_font,
         fill=(64),
     )
     display.draw.text(
-        (print_left + 130, print_top + 55),
+        (print_left + 160, print_top + 55),
         cur_state,
         font=display.suffix_font,
         fill=(64),
@@ -28,8 +28,8 @@ def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
 
 def display_3d_printer(ha_data, display):
 
-    cur_state = entity_data(ha_data, "sensor.octoprint_current_state")[0].title()
-    cur_percentage = entity_data(ha_data, "sensor.octoprint_job_percentage")[0]
+    cur_state = entity_data(ha_data, "sensor.octoprint_current_state")[0]
+    cur_percentage = f"{'{:.1f}'.format(float(entity_data(ha_data, 'sensor.octoprint_job_percentage')[0]))}%"
     est_finished_time = entity_data(ha_data, "sensor.octoprint_estimated_finish_time")[
         0
     ]
@@ -37,7 +37,7 @@ def display_3d_printer(ha_data, display):
         est_finish_hhmm = (
             datetime.fromisoformat(est_finished_time)
             .replace(tzinfo=pytz.timezone("Europe/London"))
-            .astimezone.strftime("%H:%M")
+            .strftime("%H:%M")
         )
     else:
         est_finish_hhmm = ""
