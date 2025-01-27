@@ -81,6 +81,17 @@ The PNG needs to be 760 x 1026 8 bit colour (greyscale) depth
 
 It looks like the excellent [Pillow](https://pillow.readthedocs.io/en/stable/) library does everything I need it to do.
 
-python/test.py has a thing in it.
+I've created a Flask app that does all the things
 
-All I need to sort out now is where to get the data from and how to organise it on the screen.
+It can be started up with Docker
+
+```
+cd kindleDisplay
+docker compose build
+docker compose up -d
+```
+
+#### Required environment variables
+
+- URL (URL for the home assistant API)
+- KEY (Long-term token for access to the API)
