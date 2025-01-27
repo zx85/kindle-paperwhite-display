@@ -13,13 +13,13 @@ def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
         fill=(64),
     )
     display.draw.text(
-        (print_left + 160, print_top),
+        (print_left + 200, print_top),
         est_finish_hhmm,
         font=display.value_font,
         fill=(64),
     )
     display.draw.text(
-        (print_left + 160, print_top + 55),
+        (print_left + 200, print_top + 55),
         cur_state,
         font=display.suffix_font,
         fill=(64),
