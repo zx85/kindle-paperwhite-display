@@ -30,6 +30,10 @@ class kindleDisplay:
         self.uparrow_icon = Image.open("images/up-arrow.png")
         self.downarrow_icon = Image.open("images/down-arrow.png")
         self.noarrow_icon = Image.open("images/no-arrow.png")
+        self.car_charging_icon = Image.open("images/carcharging-68x80.png")
+        self.car_not_charging_icon = Image.open("images/carnotcharging-68x80.png")
+        self.zap_icon = Image.open("images/zap-24x41.png")
+
         self.previous_timestamp = ""
         self.previous_battery = 50.0
         self.battery_direction_icon = self.noarrow_icon

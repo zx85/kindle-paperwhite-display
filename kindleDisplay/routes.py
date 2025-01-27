@@ -8,6 +8,7 @@ from kindleDisplay.includes.presence import display_presence
 from kindleDisplay.includes.weather import display_weather
 from kindleDisplay.includes.tasks import display_tasks
 from kindleDisplay.includes.threedprinter import display_3d_printer
+from kindleDisplay.includes.charge import display_charge
 
 import json
 import requests
@@ -27,6 +28,7 @@ def render_picture(ha_data, kindle_battery, display):
     display_presence(ha_data, display)
     display_3d_printer(ha_data, display)
     display_kindle_battery(kindle_battery, display)
+    display_charge(ha_data, display)
 
     out = display.image.rotate(270, expand=True)  # degrees counter-clockwise
     return out
