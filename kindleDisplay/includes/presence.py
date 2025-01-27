@@ -1,12 +1,16 @@
 from kindleDisplay.includes.utils import entity_data, entity_display
 
 
-def display_presence_text(entity, presence, display):
+def display_presence_text(entity, index, presence, display):
+    # position of things
+    presence_left = 940
+    presence_top = 110
+    presence_spacing = 150
+    x = presence_left
+    y = presence_top + (index * presence_spacing)
+
     # define some values
     letter = entity[1]
-    x = entity[2]
-    y = entity[3]
-
     radius = 60
     if presence:
         colour = 64
@@ -23,18 +27,23 @@ def display_presence_text(entity, presence, display):
 
 
 def display_presence(ha_data, display):
-    # position of things
-    presence_left = 940
 
-    for each_entity in [
-        ("device_tracker.james_phone", " j", presence_left, 110),
-        ("device_tracker.beth_phone", "B", presence_left, 250),
-        ("device_tracker.chris_phone", "C", presence_left, 390),
-        ("device_tracker.lenni_phone", "L", presence_left, 530),
-    ]:
+    for index, each_entity in enumerate(
+        [
+            ("device_tracker.james_phone", " j"),
+            ("device_tracker.beth_phone", "B"),
+            ("device_tracker.chris_phone", "C"),
+            ("device_tracker.lenni_phone", "L"),
+        ]
+    ):
         ha_presence = entity_data(ha_data, each_entity[0])[0]
         if ha_presence == "home":
             presence = True
         else:
             presence = False
-        display_presence_text(each_entity, presence, display)
+        display_presence_text(
+            each_entity,
+            index,
+            presence,
+            display,
+        )

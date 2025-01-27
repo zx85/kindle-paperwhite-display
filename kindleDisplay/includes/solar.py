@@ -59,7 +59,7 @@ def display_solar(ha_data, display):
     if solar_value < 40:
         display.image.paste(display.weather_icons[4], (solar_left, 10))
     elif solar_value < 500:
-        display.image.paste(display.weather_icons[3], (solar_left), 10)
+        display.image.paste(display.weather_icons[3], (solar_left, 10))
     elif solar_value < 1000:
         display.image.paste(display.weather_icons[2], (solar_left, 10))
     elif solar_value < 1800:

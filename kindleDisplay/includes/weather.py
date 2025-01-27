@@ -30,7 +30,7 @@ def display_weather(ha_data, display):
         fill=(0),
     )
     display.draw.text(
-        (weather_left + 130, weather_top + 50),
+        (weather_left + 130, weather_top + 55),
         f"{rain}% rain",
         font=display.suffix_font,
         fill=(0),

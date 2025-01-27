@@ -33,10 +33,11 @@ def display_tasks(display):
     ]
 
     for index, task in enumerate(incomplete_tasks):
-        display.draw.text(
-            (tasks_left, tasks_top + (index * 40)),
-            task["summary"],
-            font=display.suffix_font,
-            fill=0,
-        )
+        if index < 10:
+            display.draw.text(
+                (tasks_left + (450 * (index % 2)), tasks_top + (int(index / 2) * 40)),
+                task["summary"],
+                font=display.suffix_font,
+                fill=0,
+            )
     ws.close()
