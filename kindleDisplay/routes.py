@@ -7,6 +7,7 @@ from kindleDisplay.includes.kindle_battery import display_kindle_battery
 from kindleDisplay.includes.presence import display_presence
 from kindleDisplay.includes.weather import display_weather
 from kindleDisplay.includes.tasks import display_tasks
+from kindleDisplay.includes.calendar import display_calendar
 from kindleDisplay.includes.threedprinter import display_3d_printer
 from kindleDisplay.includes.charge import display_charge
 
@@ -25,6 +26,7 @@ def render_picture(ha_data, kindle_battery, display):
     display_weather(ha_data, display)
     display.draw.line((40, 500, 840, 500), fill=64, width=1)
     display_tasks(display)
+    display_calendar(display)
     display_presence(ha_data, display)
     display_3d_printer(ha_data, display)
     display_kindle_battery(kindle_battery, display)
