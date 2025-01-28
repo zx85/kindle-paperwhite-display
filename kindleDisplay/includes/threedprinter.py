@@ -6,7 +6,7 @@ import pytz
 def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
     print_left = 490
     if cur_state == "3D printer offline":  # Bodge for 3D printer offline
-        print_left = 400
+        print_left = 390
 
     print_top = 392
     display.draw.text(
