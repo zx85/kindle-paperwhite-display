@@ -5,6 +5,9 @@ import pytz
 
 def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
     print_left = 490
+    if cur_state == "3D printer offline":  # Bodge for 3D printer offline
+        print_left = 400
+
     print_top = 392
     display.draw.text(
         (print_left, print_top),
@@ -28,7 +31,7 @@ def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
 
 def display_3d_printer(ha_data, display):
 
-    cur_state = entity_data(ha_data, "sensor.octoprint_current_state")[0]
+    cur_state = entity_data(ha_data, "sensor.octoprint_current_state")[0].title()
     cur_percentage = f"{'{:.1f}'.format(float(entity_data(ha_data, 'sensor.octoprint_job_percentage')[0]))}%"
     est_finished_time = entity_data(ha_data, "sensor.octoprint_estimated_finish_time")[
         0
