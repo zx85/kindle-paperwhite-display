@@ -2,7 +2,7 @@ from kindleDisplay.includes.utils import entity_data, entity_display
 
 
 def display_charge(ha_data, display):
-    zappi_charge_mode = entity_data(ha_data, "select.myenergi_zappi_2_charge_mode")[0]
+    zappi_charge_mode = entity_data(ha_data, "select.myenergi_zappi_2_charge_mode")[0].lower()
     solis_battery_charging = entity_data(
         ha_data, "input_boolean.solar_battery_charging"
     )[0]
