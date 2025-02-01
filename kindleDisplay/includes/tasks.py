@@ -25,14 +25,15 @@ def display_tasks(display):
     }
     ws.send(json.dumps(message))
     result = json.loads(ws.recv())
-    # print("'%s'" % result)
+    print("'%s'" % result)
     incomplete_tasks = [
-        task
+        {"summary": task["summary"], "due": task["due"]}
         for task in result["result"]["response"]["todo.my_tasks"]["items"]
         if task["status"] == "needs_action"
     ]
+    sorted_incomplete_tasks = sorted(incomplete_tasks, key=lambda x: x["due"])
 
-    for index, task in enumerate(incomplete_tasks):
+    for index, task in enumerate(sorted_incomplete_tasks):
         if index < 5:
             display.draw.text(
                 (tasks_left, tasks_top + (index * 40)),

@@ -5,6 +5,9 @@ import pytz
 
 def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
     print_left = 490
+    if cur_state == "3D printer offline":  # Bodge for 3D printer offline
+        print_left = 390
+
     print_top = 392
     display.draw.text(
         (print_left, print_top),
@@ -28,7 +31,7 @@ def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
 
 def display_3d_printer(ha_data, display):
 
-    cur_state = entity_data(ha_data, "sensor.octoprint_current_state")[0].upper()
+    cur_state = entity_data(ha_data, "sensor.octoprint_current_state")[0].title()
     if cur_state == "Unavailable":
         display_3d_text("", "", "3D printer offline", display)
     elif cur_state == "Printing":
