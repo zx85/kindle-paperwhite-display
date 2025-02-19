@@ -46,7 +46,7 @@ def display_calendar(display):
         if index < 5:
             days_until_event = (
                 datetime.strptime(event["start"], "%Y-%m-%d") - datetime.now()
-            ).days - 1
+            ).days + 1
 
             display.draw.text(
                 (calendar_left, calendar_top + index * 40),
