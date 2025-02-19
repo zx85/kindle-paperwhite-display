@@ -32,21 +32,21 @@ def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
 def display_3d_printer(ha_data, display):
 
     cur_state = entity_data(ha_data, "sensor.octoprint_current_state")[0].title()
-    cur_percentage = f"{'{:.1f}'.format(float(entity_data(ha_data, 'sensor.octoprint_job_percentage')[0]))}%"
-    est_finished_time = entity_data(ha_data, "sensor.octoprint_estimated_finish_time")[
-        0
-    ]
-    if est_finished_time.lower() != "unknown":
-        est_finish_hhmm = (
-            datetime.fromisoformat(est_finished_time)
-            .replace(tzinfo=pytz.timezone("Europe/London"))
-            .strftime("%H:%M")
-        )
-    else:
-        est_finish_hhmm = ""
     if cur_state == "Unavailable":
         display_3d_text("", "", "3D printer offline", display)
     elif cur_state == "Printing":
-        display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display)
+        cur_percentage = f"{'{:.1f}'.format(float(entity_data(ha_data, 'sensor.octoprint_job_percentage')[0]))}%"
+        est_finished_time = entity_data(
+            ha_data, "sensor.octoprint_estimated_finish_time"
+        )[0]
+        if est_finished_time.lower() != "unknown":
+            est_finish_hhmm = (
+                datetime.fromisoformat(est_finished_time)
+                .replace(tzinfo=pytz.timezone("Europe/London"))
+                .strftime("%H:%M")
+            )
+        else:
+            est_finish_hhmm = ""
+            display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display)
     else:
         display_3d_text("", "", cur_state, display)
