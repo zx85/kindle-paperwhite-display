@@ -29,7 +29,7 @@ def render_picture(ha_data, kindle_battery, display):
     display_kindle_battery(kindle_battery, display)
     display_charge(ha_data, display)
 
-    out = display.image.rotate(270, expand=True)  # degrees counter-clockwise
+    out = display.image.rotate(90, expand=True)  # degrees counter-clockwise
     return out
 
 
