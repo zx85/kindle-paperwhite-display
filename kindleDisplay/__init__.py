@@ -2,7 +2,6 @@
 from flask import Flask
 import json
 from PIL import Image, ImageFont, ImageDraw
-import requests
 import os
 
 app = Flask(__name__)

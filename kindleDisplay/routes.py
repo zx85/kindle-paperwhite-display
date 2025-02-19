@@ -11,10 +11,7 @@ from kindleDisplay.includes.calendar import display_calendar
 from kindleDisplay.includes.threedprinter import display_3d_printer
 from kindleDisplay.includes.charge import display_charge
 
-import json
 import requests
-import datetime
-import sys
 
 display = kindleDisplay(ha_info)
 
