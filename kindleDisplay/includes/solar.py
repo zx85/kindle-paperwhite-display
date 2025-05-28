@@ -1,4 +1,8 @@
-from kindleDisplay.includes.utils import entity_data, entity_display
+from kindleDisplay.includes.utils import entity_data, entity_display, utc_to_local
+import logging
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)  # Set the default logging level to DEBUG
 
 
 # Solar display
@@ -166,13 +170,14 @@ def display_solar(ha_data, display):
 
     display.image.paste(battery_direction_icon, (battery_left - 10, 70))
 
-    # Battery
+    # Battery timestamp
+
     solar_text(
         battery_left,
         150,
         ha_data,
         "sensor.solis_remaining_battery_capacity",
-        f"@{entity_data(ha_data, 'sensor.solis_total_consumption_power')[2][11:16]}",
+        f"@{utc_to_local(current_timestamp)}",
         display,
     )
     # Update the previous timestamps and values

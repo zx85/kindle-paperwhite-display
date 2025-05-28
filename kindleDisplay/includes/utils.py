@@ -1,3 +1,11 @@
+import logging
+from datetime import datetime
+import pytz
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)  # Set the default logging level to DEBUG
+
+
 # Function to find the dictionary with the specified entity_id
 def entity_data(data, entity_id):
     entity = next((item for item in data if item["entity_id"] == entity_id), None)
@@ -26,3 +34,13 @@ def entity_display(data, entity_id):
     else:
         display_value = value
     return f"{display_value}{uom}"
+
+
+def utc_to_local(utc, format="%H:%M"):
+    log.debug(f"utc time: {utc}")
+    dt_utc = datetime.fromisoformat(utc)
+    dt_utc = dt_utc.astimezone(pytz.utc)  # Ensure it's aware and in UTC
+    dt_local = dt_utc.astimezone(pytz.timezone("Europe/London"))
+    local = dt_local.strftime(format)
+    log.debug(f"local time: {local}")
+    return local

@@ -93,12 +93,20 @@ docker compose up -d
 
 ..or it can be started with python (having set up venv with the requirements if necessary)
 
+*Linux*
+```
+export FLASK_APP=run.py
+set FLASK_ENV=development
+flask run --host=0.0.0.0 --port=8080
+```
+
 *Windows*
 ```
 set FLASK_APP=run.py
 set FLASK_ENV=development
 flask run --host=0.0.0.0 --port=8080
 ```
+
 
 
 #### Required environment variables
