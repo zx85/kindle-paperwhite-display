@@ -113,3 +113,9 @@ flask run --host=0.0.0.0 --port=8080
 
 - URL (URL for the home assistant API)
 - KEY (Long-term token for access to the API)
+
+
+
+##### Attributes
+
+Washing machine icon: [www.flaticon.com](https://www.flaticon.com/free-icons/clean)
