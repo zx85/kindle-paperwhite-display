@@ -8,26 +8,13 @@ from kindleDisplay.includes.presence import display_presence
 from kindleDisplay.includes.weather import display_weather
 from kindleDisplay.includes.tasks import display_tasks
 from kindleDisplay.includes.calendar import display_calendar
-from kindleDisplay.includes.threedprinter import display_3d_printer
+from kindleDisplay.includes.threedprinter import display_printer
 from kindleDisplay.includes.charge import display_charge
 
-import logging
 import requests
+import logging
 
-# Create a logger instance
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)  # Set the default logging level to DEBUG
-
-# Create a console handler
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-
-# Define the log format
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-console_handler.setFormatter(formatter)
-
-# Add the handler to the logger
-log.addHandler(console_handler)
 
 display = kindleDisplay(ha_info)
 
@@ -38,10 +25,10 @@ def render_picture(ha_data, kindle_battery, display):
     display.draw.line((40, 380, 840, 380), fill=64, width=1)
     display_weather(ha_data, display)
     display.draw.line((40, 500, 840, 500), fill=64, width=1)
+    display_printer(ha_data, display)
     display_tasks(display)
     display_calendar(display)
     display_presence(ha_data, display)
-    display_3d_printer(ha_data, display)
     display_kindle_battery(kindle_battery, display)
     display_charge(ha_data, display)
 

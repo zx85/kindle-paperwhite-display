@@ -4,7 +4,7 @@ import logging
 
 # Create a logger instance
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)  # Set the default logging level to DEBUG
+log.setLevel(logging.INFO)  # Set the default logging level to DEBUG
 
 
 def display_tasks(display):
