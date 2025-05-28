@@ -11,7 +11,23 @@ from kindleDisplay.includes.calendar import display_calendar
 from kindleDisplay.includes.threedprinter import display_3d_printer
 from kindleDisplay.includes.charge import display_charge
 
+import logging
 import requests
+
+# Create a logger instance
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)  # Set the default logging level to DEBUG
+
+# Create a console handler
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+
+# Define the log format
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+console_handler.setFormatter(formatter)
+
+# Add the handler to the logger
+log.addHandler(console_handler)
 
 display = kindleDisplay(ha_info)
 
@@ -39,6 +55,7 @@ def get_data():
     # Get the battery level from the request
     kindle_battery = request.args.get("battery")
     # Get the data from Home Assistant
+    log.debug(f'URL: {ha_info["url"]}')
     ha_data = requests.get(
         f"{ha_info['url']}/states",
         headers={"Authorization": f"Bearer {ha_info['key']}"},

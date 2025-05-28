@@ -1,5 +1,10 @@
 from websocket import create_connection
 import json
+import logging
+
+# Create a logger instance
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)  # Set the default logging level to DEBUG
 
 
 def display_tasks(display):
@@ -25,7 +30,7 @@ def display_tasks(display):
     }
     ws.send(json.dumps(message))
     result = json.loads(ws.recv())
-    print("'%s'" % result)
+    log.debug(result)
     incomplete_tasks = [
         {"summary": task["summary"], "due": task["due"]}
         for task in result["result"]["response"]["todo.my_tasks"]["items"]
