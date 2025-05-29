@@ -1,4 +1,4 @@
-from kindleDisplay.includes.utils import entity_data, entity_display
+from kindleDisplay.includes.utils import entity_data
 
 
 def display_presence_text(entity, index, presence, display):

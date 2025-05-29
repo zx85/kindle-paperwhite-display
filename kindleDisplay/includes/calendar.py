@@ -5,7 +5,7 @@ import json
 
 def display_calendar(display):
     # positioning
-    calendar_left = 490
+    calendar_left = 420
     calendar_top = 530
 
     ws_url = display.ha_info["url"].replace("http", "ws") + "/websocket"

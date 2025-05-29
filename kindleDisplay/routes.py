@@ -10,7 +10,7 @@ from kindleDisplay.includes.tasks import display_tasks
 from kindleDisplay.includes.calendar import display_calendar
 from kindleDisplay.includes.threedprinter import display_printer
 from kindleDisplay.includes.charge import display_charge
-
+from kindleDisplay.includes.washing_machine import display_washing_machine
 import requests
 import logging
 
@@ -31,6 +31,7 @@ def render_picture(ha_data, kindle_battery, display):
     display_presence(ha_data, display)
     display_kindle_battery(kindle_battery, display)
     display_charge(ha_data, display)
+    display_washing_machine(ha_data, display)
 
     out = display.image.rotate(90, expand=True)  # degrees counter-clockwise
     return out

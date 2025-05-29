@@ -19,12 +19,13 @@ def display_3d_text(cur_percentage, est_finish_hhmm, cur_state, display):
         font=display.value_font,
         fill=(0),
     )
-    display.draw.text(
-        (print_left + 140, print_top + 50),
-        f"({est_finish_hhmm})",
-        font=display.suffix_font,
-        fill=(0),
-    )
+    if est_finish_hhmm:
+        display.draw.text(
+            (print_left + 140, print_top + 50),
+            f"({est_finish_hhmm})",
+            font=display.suffix_font,
+            fill=(0),
+        )
 
     display.draw.text(
         (print_left, print_top),
@@ -39,7 +40,7 @@ def display_printer(ha_data, display):
     cur_state_display = f"3D printer {cur_state.lower()}"
     if cur_state == "Unavailable":
         cur_state_display = "3D printer offline"
-    elif cur_state == "Printing":
+    if cur_state == "Printing":
         cur_percentage = f"{'{:.1f}'.format(float(entity_data(ha_data, 'sensor.octoprint_job_percentage')[0]))}%"
         est_finished_time = entity_data(
             ha_data, "sensor.octoprint_estimated_finish_time"

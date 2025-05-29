@@ -40,11 +40,12 @@ def display_weather(ha_data, display):
     if weather == "partlycloudy":
         weather = "party cloudy"
     else:
-        weather = weather.replace("-", " ")
+        weather = "partly cloudy"
+        # weather = weather.replace("-", " ")
 
     if weather != "unavailable":
         display.draw.text(
-            (weather_left + 130, weather_top),
+            (weather_left + 130, weather_top - 5),
             f"{weather}",
             font=display.value_font,
             fill=(0),
