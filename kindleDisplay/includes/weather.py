@@ -21,17 +21,26 @@ def display_weather(ha_data, display):
     # positions
     weather_left = 40
     weather_top = 392
-
-    rain = entity_data(
-        ha_data,
-        "sensor.met_office_bury_st_edmunds_probability_of_precipitation_3_hourly",
-    )[0]
-    temp = entity_data(
-        ha_data, "sensor.met_office_bury_st_edmunds_temperature_3_hourly"
-    )[0]
-    weather = entity_data(
-        ha_data, "sensor.met_office_bury_st_edmunds_weather_3_hourly"
-    )[0]
+    more_weather_data = next(
+        (
+            item
+            for item in ha_data
+            if item["entity_id"] == "sensor.local_current_weather"
+        ),
+        None,
+    )
+    log.debug(f"more weather data: {more_weather_data}")
+    weather_data = next(
+        (item for item in ha_data if item["entity_id"] == "weather.met_office_datahub"),
+        None,
+    )
+    rain = more_weather_data.get("attributes").get("status").get("probOfPrecipitation")
+    temp = str(round(float(weather_data.get("attributes").get("temperature"))))
+    weather = weather_data.get("state")
+    if weather == "partlycloudy":
+        weather = "party cloudy"
+    else:
+        weather = weather.replace("-", " ")
 
     if weather != "unavailable":
         display.draw.text(

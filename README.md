@@ -107,6 +107,8 @@ set FLASK_ENV=development
 flask run --host=0.0.0.0 --port=8080
 ```
 
+#### Home Assistant bits
+There's a replacement for the Met Office API, which has been deprecated ... more about it [here](https://community.home-assistant.io/t/template-weather-provider-from-uk-met-office-datahub-api/695692)
 
 
 #### Required environment variables
