@@ -11,8 +11,11 @@ def display_washing_machine(ha_data, display):
     else:
         display.image.paste(display.washing_machine_on, (washing_left, washing_top))
         display.draw.text(
-            (washing_left + 8, washing_top + 80),
+            (
+                washing_left + 5 - (int(int(time_remaining) / 100) * 8),
+                washing_top + 72,
+            ),
             f"{time_remaining}",
-            font=display.suffix_font,
+            font=display.value_font,
             fill=(64),
         )
