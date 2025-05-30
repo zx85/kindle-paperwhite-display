@@ -34,7 +34,7 @@ class kindleDisplay:
         self.car_not_charging_icon = Image.open("images/carnotcharging-68x80.png")
         self.zap_icon = Image.open("images/zap-24x41.png")
         self.washing_machine_off = Image.open("images/washing-machine-off-63x80.png")
-        self.washing_machine_on = Image.open("images/washing-machine-on-63x80.png")
+        self.washing_machine_on = Image.open("images/washing-machine-on-2-63x80.png")
 
         self.previous_timestamp = ""
         self.previous_battery = 50.0
