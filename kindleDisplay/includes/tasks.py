@@ -32,9 +32,12 @@ def display_tasks(display):
     result = json.loads(ws.recv())
     log.debug(result)
     incomplete_tasks = [
-        {"summary": task["summary"], "due": task["due"]}
-        for task in result["result"]["response"]["todo.my_tasks"]["items"]
-        if task["status"] == "needs_action"
+        {"summary": task.get("summary"), "due": task.get("due", 0)}
+        for task in result.get("result", {})
+        .get("response", {})
+        .get("todo.my_tasks", {})
+        .get("items", [])
+        if task.get("status", "") == "needs_action"
     ]
     sorted_incomplete_tasks = sorted(incomplete_tasks, key=lambda x: x["due"])
 
