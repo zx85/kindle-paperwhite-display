@@ -51,3 +51,10 @@ def utc_to_local(utc, format="%H:%M"):
     local = dt_local.strftime(format)
     log.debug(f"local time: {local}")
     return local
+
+# Filter out non-numerics
+def check_numeric(value):
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return None

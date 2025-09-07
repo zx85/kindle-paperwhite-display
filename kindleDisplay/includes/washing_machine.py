@@ -1,4 +1,4 @@
-from kindleDisplay.includes.utils import entity_data, entity_display
+from kindleDisplay.includes.utils import entity_data, entity_display, check_numeric
 
 
 def display_washing_machine(ha_data, display):
@@ -6,7 +6,7 @@ def display_washing_machine(ha_data, display):
     washing_top = 630
     status = entity_data(ha_data, "binary_sensor.washing_machine_status")[0]
     time_remaining = entity_data(ha_data, "sensor.washing_machine_remaining_time")[0]
-    if status == "off":
+    if status.lower() in ["off","unavailable"] or not(check_numeric(time_remaining)):
         display.image.paste(display.washing_machine_off, (washing_left, washing_top))
     else:
         display.image.paste(display.washing_machine_on, (washing_left, washing_top))
