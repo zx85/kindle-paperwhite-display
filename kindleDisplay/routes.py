@@ -1,4 +1,5 @@
 from flask import request, send_file
+from functools import partial
 from kindleDisplay import app, ha_info
 from kindleDisplay.includes.classes import kindleDisplay
 from io import BytesIO
@@ -12,6 +13,7 @@ from kindleDisplay.includes.threedprinter import display_printer
 from kindleDisplay.includes.charge import display_charge
 from kindleDisplay.includes.washing_machine import display_washing_machine
 from kindleDisplay.includes.octopus import display_octopus
+from kindleDisplay.includes.recording import display_recording
 
 import requests
 import logging
@@ -23,18 +25,27 @@ display = kindleDisplay(ha_info)
 
 def render_picture(ha_data, kindle_battery, display):
     display.clear_image()
-    display_solar(ha_data, display)
+
     display.draw.line((40, 380, 840, 380), fill=64, width=1)
-    display_weather(ha_data, display)
     display.draw.line((40, 500, 840, 500), fill=64, width=1)
-    display_printer(ha_data, display)
-    display_tasks(display)
-    display_calendar(display)
-    display_presence(ha_data, display)
-    display_kindle_battery(kindle_battery, display)
-    display_charge(ha_data, display)
-    display_washing_machine(ha_data, display)
-    display_octopus(ha_data, display)
+
+    # Do the displaying
+    display_functions = [
+        partial(display_solar, ha_data, display),
+        partial(display_weather, ha_data, display),
+        partial(display_printer, ha_data, display),
+        partial(display_tasks, display),
+        partial(display_calendar, display),
+        partial(display_presence, ha_data, display),
+        partial(display_kindle_battery, kindle_battery, display),
+        partial(display_charge, ha_data, display),
+        partial(display_washing_machine, ha_data, display),
+        partial(display_octopus, ha_data, display),
+        partial(display_recording, ha_data, display),
+    ]
+
+    for func in display_functions:
+        func()
 
     out = display.image.rotate(90, expand=True)  # degrees counter-clockwise
     return out
