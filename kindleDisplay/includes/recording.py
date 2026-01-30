@@ -11,7 +11,7 @@ def display_recording(ha_data, display):
     radius=45
     log.debug(f"Recording: {entity_data(ha_data, 'input_boolean.toggl_button')[0]}")
     recording = entity_data(ha_data, "input_boolean.toggl_button")[0]
-    if recording: #=="on":
+    if recording == "on":
         log.debug('Recording is on')
 
         twoPointList = [(x - radius, y - radius), (x + radius, y + radius)]
