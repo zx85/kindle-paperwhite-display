@@ -14,4 +14,8 @@ services:
       - FLASK_APP=kindleDisplay
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
 
