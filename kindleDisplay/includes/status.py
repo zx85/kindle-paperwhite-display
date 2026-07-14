@@ -8,7 +8,7 @@ def display_rounded_rectangle(status_left,
     rect_width=92
     rect_height=75
     rect_xy=[(rect_x,rect_y), (rect_x + rect_width, rect_y + rect_height)]
-    display.draw.rounded_rectangle(rect_xy, radius=8, fill=224, outline=None, width=1, corners=None)
+    display.draw.rounded_rectangle(rect_xy, radius=8, fill=240, outline=None, width=1, corners=None)
 
 
 def display_status_text(entity,
@@ -24,7 +24,7 @@ def display_status_text(entity,
     # define some values
     device = entity[1]
     if status:
-        colour = 128
+        colour = 64
     else:
         colour = 255
     display.draw.text(
