@@ -12,6 +12,7 @@ from kindleDisplay.includes.calendar import display_calendar
 from kindleDisplay.includes.charge import display_charge
 from kindleDisplay.includes.octopus import display_octopus
 from kindleDisplay.includes.recording import display_recording
+from kindleDisplay.includes.status import display_status
 # from kindleDisplay.includes.threedprinter import display_printer
 # from kindleDisplay.includes.washing_machine import display_washing_machine
 
@@ -40,6 +41,7 @@ def render_picture(ha_data, kindle_battery, display):
         partial(display_charge, ha_data, display),
         partial(display_octopus, ha_data, display),
         partial(display_recording, ha_data, display),
+        partial(display_status, ha_data, display),
 #       partial(display_washing_machine, ha_data, display),
 #       partial(display_printer, ha_data, display),
     ]

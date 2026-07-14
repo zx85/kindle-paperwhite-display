@@ -4,24 +4,24 @@ from kindleDisplay.includes.utils import entity_data
 def display_presence_text(entity, index, presence, display):
     # position of things
     presence_left = 940
-    presence_top = 110
-    presence_spacing = 150
+    presence_top = 60
+    presence_spacing = 100
     x = presence_left
     y = presence_top + (index * presence_spacing)
 
     # define some values
     letter = entity[1]
-    radius = 60
+    radius = 42
     if presence:
         colour = 64
     else:
         colour = 224
     twoPointList = [(x - radius, y - radius), (x + radius, y + radius)]
-    display.draw.ellipse(twoPointList, fill=255, outline=colour, width=15)
+    display.draw.ellipse(twoPointList, fill=255, outline=colour, width=10)
     display.draw.text(
-        (x - 18, y - 40),
+        (x - 12, y - 32),
         letter,
-        font=display.heading_font,
+        font=display.value_font,
         fill=(colour),
     )
 
