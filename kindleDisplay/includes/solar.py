@@ -34,21 +34,28 @@ def solar_text(x, y, ha_data, entities, suffix, display):
 
 
 def display_solar(ha_data, display):
-    current_timestamp = entity_data(ha_data, "sensor.solis_total_consumption_power")[2]
 
     """
     This function displays solar-related information on the display.
     """
 
     # elements are
-    # {"solar_in":"sensor.solis_ac_output_total_power",     # current solar power
-    # "solar_today":"sensor.solis_energy_today",                   # solar today
-    # "power_used": "sensor.solis_total_consumption_power", # current consumption
-    # "power_used_today": "sensor.solis_daily_grid_energy_used",  # power used today
-    # "grid_in": "sensor.solis_power_grid_total_power",  # current grid power
-    # "export_today":"sensor.solis_daily_on_grid_energy",          # exported today
-    # "grid_in_today":"sensor.solis_daily_grid_energy_purchased"}
-    # "battery_per": "sensor.solis_remaining_battery_capacity",  # % battery remaining
+    solar_mapping={
+    "solar_in":"sensor.hall_solis_inverter_inverter_ac_power",             # current solar power
+    "solar_today":"sensor.hall_solis_inverter_inverter_generation_today",  # solar today
+    "power_used": "sensor.hall_solis_inverter_home_load_power",            # current consumption
+    "power_used_today": "sensor.hall_solis_inverter_home_load_today",      # consumed today
+    "grid_in": "sensor.hall_solis_inverter_grid_active_power",             # current grid power
+    "export_today":"sensor.hall_solis_inverter_grid_export_today",         # exported today
+    "grid_in_today":"sensor.hall_solis_inverter_grid_import_today",        # grid today
+    "battery_per": "sensor.hall_solis_inverter_battery_soc",               # % battery remaining
+    "runtime_today":"sensor.hall_solis_inverter_inverter_runtime_today",
+    "timestamp": "sensor.date_time_iso"
+    }
+
+    runtime_today=entity_display(ha_data, solar_mapping['runtime_today'])
+    timestamp_full=entity_display(ha_data, solar_mapping['timestamp']).split('T')[1]
+    timestamp=':'.join(timestamp_full.split(':')[:2])
 
     # Positions of things
     solar_left = 30
@@ -59,7 +66,7 @@ def display_solar(ha_data, display):
     #######################################
 
     # Solar icon
-    solar_value = float(entity_data(ha_data, "sensor.solis_ac_output_total_power")[0])
+    solar_value = float(entity_data(ha_data, solar_mapping['solar_in'])[0])
     if solar_value < 40:
         display.image.paste(display.weather_icons[4], (solar_left, 10))
     elif solar_value < 500:
@@ -76,13 +83,13 @@ def display_solar(ha_data, display):
         solar_left + 10,
         130,
         ha_data,
-        "sensor.solis_ac_output_total_power",
+        solar_mapping['solar_in'],
         "now",
         display,
     )
     # Solar today
     solar_text(
-        solar_left + 10, 220, ha_data, "sensor.solis_energy_today", "today", display
+        solar_left + 10, 220, ha_data, solar_mapping['solar_today'], "today", display
     )
 
     # Consumed power
@@ -95,7 +102,7 @@ def display_solar(ha_data, display):
         powerused_left - 5,
         130,
         ha_data,
-        "sensor.solis_total_consumption_power",
+        solar_mapping['power_used'],
         "now",
         display,
     )
@@ -103,7 +110,7 @@ def display_solar(ha_data, display):
         powerused_left - 5,
         220,
         ha_data,
-        "sensor.solis_daily_grid_energy_used",
+        solar_mapping['power_used_today'],
         "today",
         display,
     )
@@ -112,7 +119,7 @@ def display_solar(ha_data, display):
     ########################################
     display.image.paste(display.pylon_icon, (gridpower_left, 10))
 
-    cur_power = float(entity_data(ha_data, "sensor.solis_power_grid_total_power")[0])
+    cur_power = float(entity_data(ha_data, solar_mapping['grid_in'])[0])
     if cur_power > 0:
         display.image.paste(display.uparrow_icon, (gridpower_left + 3, 150))
     elif cur_power < 0:
@@ -122,7 +129,7 @@ def display_solar(ha_data, display):
         gridpower_left + 25,
         130,
         ha_data,
-        "sensor.solis_power_grid_total_power",
+        solar_mapping['grid_in'],
         "now",
         display,
     )
@@ -136,8 +143,8 @@ def display_solar(ha_data, display):
         220,
         ha_data,
         (
-            "sensor.solis_daily_on_grid_energy",
-            "sensor.solis_daily_grid_energy_purchased",
+            solar_mapping['export_today'],
+            solar_mapping['grid_in_today'],
         ),
         "today",
         display,
@@ -145,7 +152,7 @@ def display_solar(ha_data, display):
 
     # Battery
     battery_value = float(
-        entity_data(ha_data, "sensor.solis_remaining_battery_capacity")[0]
+        entity_data(ha_data, solar_mapping['battery_per'])[0]
     )
     batt_icon_x = battery_left + 25
     display.draw.rectangle(
@@ -159,7 +166,7 @@ def display_solar(ha_data, display):
     )
 
     battery_direction_icon = display.noarrow_icon
-    if display.previous_timestamp != current_timestamp:
+    if display.previous_runtime_today != runtime_today:
         # Arrows if the time has changed
         if battery_value > display.previous_battery:
             battery_direction_icon = display.uparrow_icon
@@ -170,15 +177,15 @@ def display_solar(ha_data, display):
 
     display.image.paste(battery_direction_icon, (battery_left - 10, 70))
 
-    # Battery timestamp
+    # Battery timestamp.split(':')[:2]
 
     solar_text(
         battery_left,
         150,
         ha_data,
-        "sensor.solis_remaining_battery_capacity",
-        f"@{utc_to_local(current_timestamp)}",
+        solar_mapping['battery_per'],
+        timestamp,
         display,
     )
     # Update the previous timestamps and values
-    display.previous_timestamp = current_timestamp
+    display.previous_runtime_today = runtime_today

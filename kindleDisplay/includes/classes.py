@@ -36,7 +36,7 @@ class kindleDisplay:
         self.washing_machine_off = Image.open("images/washing-machine-off-63x80.png")
         self.washing_machine_on = Image.open("images/washing-machine-on-2-63x80.png")
 
-        self.previous_timestamp = ""
+        self.previous_runtime_today = ""
         self.previous_battery = 50.0
         self.battery_direction_icon = self.noarrow_icon
 

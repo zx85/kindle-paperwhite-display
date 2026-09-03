@@ -29,7 +29,7 @@ def entity_display(data, entity_id):
     entity = next((item for item in data if item["entity_id"] == entity_id), None)
     log.debug(f"entity state: {entity.get('state')}")
     if value := entity["state"].replace("-", ""):
-        uom = entity["attributes"]["unit_of_measurement"]
+        uom = entity["attributes"].get("unit_of_measurement") or ""
         try:
             if uom == "W" or uom == "%":
                 display_value = f"{int(float(value))}"
